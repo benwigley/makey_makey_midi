@@ -17,7 +17,7 @@
 //////////////////////////////
 // MIDI NOTE CODES
 //////////////////////////////
-#define LOW_NOTE    0x2E // E2
+#define LOW_NOTE    36
 #define LOW_CONTROL 60
 
 
@@ -31,13 +31,14 @@ struct MidiCode {
 MidiCode midiInputs[NUM_INPUTS] = {
 
   // top side of the makey makey board
+  // All the controls in this group we will leave as notes.
 
-  { LOW_CONTROL,     true, false },    // up arrow pad
-  { LOW_CONTROL + 1, true, false },    // down arrow pad
+  { LOW_CONTROL,     false, false },    // up arrow pad
+  { LOW_CONTROL + 1, false, false },    // down arrow pad
   { LOW_NOTE + 6,    false, false },   // left arrow pad   (PALM/WRIST HIT)
-  { LOW_CONTROL + 3, true, false },    // right arrow pad
-  { LOW_CONTROL + 4, true, false },    // space button pad
-  { LOW_CONTROL + 2, true, false },    // click button pad
+  { LOW_CONTROL + 2, false, false },    // right arrow pad
+  { LOW_CONTROL + 3, false, false },    // space button pad
+  { LOW_CONTROL + 4, false, false },    // click button pad
 
 
   // female header on the back left side
@@ -64,7 +65,7 @@ MidiCode midiInputs[NUM_INPUTS] = {
 ///////////////////////////
 // NOISE CANCELLATION /////
 ///////////////////////////
-#define SWITCH_THRESHOLD_OFFSET_PERC  40   // number between 1 and 49
+#define SWITCH_THRESHOLD_OFFSET_PERC  5    // number between 1 and 49
                                            // larger value protects better against noise oscillations, but makes it harder to press and release
                                            // recommended values are between 2 and 20
                                            // default value is 5
