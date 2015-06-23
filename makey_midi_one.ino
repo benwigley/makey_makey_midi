@@ -44,7 +44,6 @@ typedef struct {
   boolean oldestMeasurement;
   byte bufferSum;
   boolean pressed;
-  boolean prevPressed;
   boolean isControlChange; // If not a midi "control change" it will be a note
 } MakeyMakeyInput;
 
@@ -186,7 +185,6 @@ void initializeInputs() {
     inputs[i].bufferSum = 0;
 
     inputs[i].pressed = false;
-    inputs[i].prevPressed = false;
   }
 }
 
@@ -261,7 +259,6 @@ void updateBufferIndex() {
 void updateInputStates() {
   inputChanged = false;
   for (int i=0; i<NUM_INPUTS; i++) {
-    inputs[i].prevPressed = inputs[i].pressed; // store previous pressed state
 
     // Input is pressed, release it
     if (inputs[i].pressed) {
@@ -282,10 +279,11 @@ void updateInputStates() {
         inputChanged = true;
         inputs[i].pressed = true;
         if (inputs[i].isControlChange) {
-          // If the "prevPressed" attribute is true, this will send a
+          // If the "onState" attribute is true then this will send a
           // neagtive value control change value to turn the control OFF.
-          // If the "prePressed" state is false, then the control will be turned ON.
-          sendMidiEvent(188, inputs[i].midiCode, 127 * !inputs[i].prevPressed);
+          // If the "onState" state is false then the control will be turned ON.
+          midiInputs[i].onState = !midiInputs[i].onState;
+          sendMidiEvent(188, inputs[i].midiCode, 127 * midiInputs[i].onState);
         } else {
           sendMidiEvent(144, inputs[i].midiCode, 127); // "Press" midi note
         }
